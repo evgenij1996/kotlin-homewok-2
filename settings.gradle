@@ -1,0 +1,3 @@
+rootProject.name = 'kotlin-homewok-2'
+include 'pay'
+
