@@ -5,9 +5,11 @@ import java.util.*
 fun main() {
     val scanner = Scanner(System.`in`)
     while (true) {
-        println("Enter the quantity and status of the buyer " +
+        println("Enter the current and previous value," +
+                " as well as the status of the buyer " +
                 "(permanent: 1 / non-permanent: 2)")
-        val itemCount = scanner.next().toInt()
+        val currentValue = scanner.next().toInt()
+        val previousValue = scanner.next().toInt()
         val regOfPurch = scanner.next().toInt()
         if (regOfPurch !in 1..2) {
             println("Incorrect status")
@@ -17,21 +19,21 @@ fun main() {
             1 -> true
             else -> false
         }
-        val itemPrice = 100
         val discountOne = 100
-        val discountTwo = 5 //%
-        val discountLevelOne = 1_000
-        val discountLevelTwo = 1_000_1
+        val discountTwo = 0.05
+        val discountThresholdOne = 1_000
+        val discountThresholdTwo = 10_000
+        val regularCustomerDiscount = 0.01
 
-        val totalPrice = itemPrice * itemCount
-        val advanceResult = when (totalPrice) {
-            in itemPrice..discountLevelOne -> totalPrice
-            in discountLevelOne + 1..discountLevelTwo - 1 -> totalPrice - discountOne
-            else -> totalPrice - (totalPrice * discountTwo) / 100
+        val previousResult = when {
+            previousValue <= discountThresholdOne -> currentValue
+            previousValue in discountThresholdOne + 1..discountThresholdTwo -> currentValue - discountOne
+            else -> (currentValue - currentValue * discountTwo).toInt()
         }
 
-        val ultimateResult = if (regularityOfPurchases) advanceResult - advanceResult / 100
-        else advanceResult
+        val ultimateResult = if (regularityOfPurchases)
+            (previousResult - previousResult * regularCustomerDiscount).toInt()
+        else previousResult
         println("Total Price: $ultimateResult")
     }
 }
